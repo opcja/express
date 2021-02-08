@@ -5,7 +5,9 @@ var cookieParser = require('cookie-parser'); // wpiera paarsowanie cookies
 var logger = require('morgan'); // zrzucanie logów w trybie developerskim
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var quizRouter = require('./routes/quiz');
+var newsRouter = require('./routes/news');
+var adminRouter = require('./routes/admin');
 
 var app = express(); // odpalamy server
 
@@ -19,8 +21,16 @@ app.use(express.urlencoded({ extended: false })); // coś z formularzami, automa
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));// deklaracja plików statycznych
 
+app.use(function(req, res, next) {
+  res.locals.path = req.path;
+  
+  next();
+});
+
 app.use('/', indexRouter); // deklaracja routingow
-app.use('/users', usersRouter); // 1 to deklaracja adresu, pod którym dostepny bedzie router
+app.use('/news', newsRouter); // deklaracja routingow
+app.use('/quiz', quizRouter); // deklaracja routingow
+app.use('/admin', adminRouter); // deklaracja routingow
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) { // wyłapywanie błędów
