@@ -1,8 +1,13 @@
 var createError = require('http-errors'); // błędy http
+var cookieSession = require('cookie-session');
 var express = require('express'); // server
 var path = require('path'); // pobieranie ścieżek
 var cookieParser = require('cookie-parser'); // wpiera paarsowanie cookies
 var logger = require('morgan'); // zrzucanie logów w trybie developerskim
+var config = require('./config');
+const mongoose = require('mongoose');
+
+mongoose.connect(config.db, {useNewUrlParser: true, useUnifiedTopology: true});
 
 var indexRouter = require('./routes/index');
 var quizRouter = require('./routes/quiz');
@@ -20,8 +25,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false })); // coś z formularzami, automatyczne parsowanie ?
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));// deklaracja plików statycznych
+app.use(cookieSession({
+  name: 'session',
+  keys: config.keySession,
 
-app.use(function(req, res, next) {
+  // Cookie Options
+  maxAge: config.maxAgeSession,
+}))
+
+app.use(function(req, res, next) { // ogarnia aktualny path w routingu
   res.locals.path = req.path;
   
   next();
