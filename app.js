@@ -13,6 +13,7 @@ var indexRouter = require('./routes/index');
 var quizRouter = require('./routes/quiz');
 var newsRouter = require('./routes/news');
 var adminRouter = require('./routes/admin');
+var apiRouter = require('./routes/api');
 
 var app = express(); // odpalamy server
 
@@ -43,6 +44,7 @@ app.use('/', indexRouter); // deklaracja routingow
 app.use('/news', newsRouter); // deklaracja routingow
 app.use('/quiz', quizRouter); // deklaracja routingow
 app.use('/admin', adminRouter); // deklaracja routingow
+app.use('/api', apiRouter); // deklaracja routingow
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) { // wyłapywanie błędów
